@@ -116,5 +116,18 @@ resource "aws_instance" "myapp-server" {
 
   associate_public_ip_address = true
   # key_name                    = "server-key-pair"
+  user_data = file("entry-script.sh")
+  # user_data                   = <<EOF
+  #               #!/bin/bash
+  #               sudo yum update -y && sudo yum install -y docker
+  #               sudo systemctrl start docker 
+  #               sudo usermod -aG docker ec2-user
+  #               docker run -p 8080:80 nginx
+  #           EOF
+  user_data_replace_on_change = true
 }
+
+/*User data: entry point script that will be executed
+on EC2 instance whenever the server is instantiated
+*/
 
